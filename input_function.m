@@ -62,7 +62,7 @@ uiwait(d); % Wait for the dialog to close before moving on to the rest of the co
     % Delete the last character in the string
     function deletechar(hObject,callbackdata)
         temp = user.String;
-        temp = temp(1:end-1)
+        temp = temp(1:end-1);
         set(user,'String',temp)
     end
 

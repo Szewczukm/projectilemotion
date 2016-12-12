@@ -8,7 +8,8 @@ h = animatedline;  % Create the object that will be the line that we draw
 f = input_function(); % Input is a script, similar to calculator, allows user 
                       % to input a function with buttons.  Returns a
                       % function handle.
-zero = fzero(f,0)% insert function to return the zero of the function; 
+coeff = gatherterms(f)
+zeros = roots(coeff)% insert function to return the zero of the function; 
 x = linspace(0,zero,1000); % Create 1000 points between 0 and where f(x)=0
 y = f(x); % Create vector of y-values for every x on the function
 m = max(y)+0.1; % Find the max value in y

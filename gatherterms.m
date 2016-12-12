@@ -28,8 +28,7 @@ function [sortedpoly] = gatherterms(f)
     
     % Find the highest degree polynomial term
     pattern = '((?<=x\.\^)\d+)|(x(?!\.\^))'; % search for any number of numbers after a .^ or an x
-    degree = strings([length(gt),1]);
-    chargt = char(gt); % convert string array, gt, into a char array to select degree
+    degree = strings([length(gt),1]); % make an array of degrees for the amount of terms 
     [start,m_end]=regexp(text,pattern); % grab the powers on a number
     % select degree's of polynomials
     for i=1:length(start)
@@ -41,10 +40,10 @@ function [sortedpoly] = gatherterms(f)
     
     chardeg = char(degree); % convert string array, degree, into a char array to find highest degree
     % find highest degree
+    highestdeg = 0;
     for i=1:lengthgt
-        highestdeg = 0;
-        if(highestdeg<chardeg(1,1:length(chardeg)))
-            highestdeg=chardeg(1,1:length(chardeg));
+        if(highestdeg<chardeg(i,1:length(chardeg(i,:))))
+            highestdeg=chardeg(i,1:length(chardeg(i,:)));
         end
     end
     
@@ -52,14 +51,39 @@ function [sortedpoly] = gatherterms(f)
     highestdegnum = str2double(highestdeg);
     sortedpoly = zeros(1,highestdegnum+1);
     % find coefficients of each term
-    pattern = '-?\d+(?=\.\*x)';
+    pattern = '-?\d+(?=\.\*x)|(+x)?';
     coeff = strings([length(gt),1]);
-    [start, m_end] = regexp(text,pattern)
+    [start, m_end] = regexp(text,pattern);
     for i=1:length(start)
-        coeff(i) = text(start(i):m_end(i))
+        coeff(i) = text(start(i):m_end(i));
         if(strtrim(coeff(i,1))=='-')
             coeff(i)='-1';
         end
     end
-    % fill null values with 1 -- not proper
+    
+    % if a +x is found, change it to a 1
+    for i=1:length(coeff)
+        if(coeff(i)=='+x')
+            coeff(i)='1';
+        end
+    end
+    
+    % populate sortedpoly
+    for i=1:length(chardeg)
+        sortedpoly(str2num(strtrim(chardeg(i,:)))) = coeff(i);
+    end
+    
+    % flip from left to right.  Populate sortedpoly arranges backwards?
+    % (EDITORS NOTE: bad code)
+    sortedpoly = fliplr(sortedpoly);
+    % circular shift everything one unit to the left
+    sortedpoly = circshift(sortedpoly,-1);
+    
+    % find constant and apply it to the last 
+    pattern = '(?<=+|-)\d+';
+    [start,m_end]=regexp(text,pattern)
+    if(~isempty(start))
+        sortedpoly(length(sortedpoly)) = str2num(text(start(1):m_end(1)));
+    end
+    
 end
