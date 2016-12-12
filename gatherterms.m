@@ -52,15 +52,14 @@ function [sortedpoly] = gatherterms(f)
     highestdegnum = str2double(highestdeg);
     sortedpoly = zeros(1,highestdegnum+1);
     % find coefficients of each term
-    pattern = '-?\d*(?=\.\*x|x)';
-    coeff = strings([length(gt),1])
-    for i=1:lengthgt
-        [start(i), m_end(i)] = regexp(gt(i),pattern);
-        coeff(i) = chargt(1,start(i):m_end(i),i)
-        disp(coeff(i))
+    pattern = '-?\d+(?=\.\*x)';
+    coeff = strings([length(gt),1]);
+    [start, m_end] = regexp(text,pattern)
+    for i=1:length(start)
+        coeff(i) = text(start(i):m_end(i))
         if(strtrim(coeff(i,1))=='-')
             coeff(i)='-1';
         end
     end
-    
+    % fill null values with 1 -- not proper
 end
