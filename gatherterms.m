@@ -81,7 +81,7 @@ function [sortedpoly] = gatherterms(f)
     
     % find constant and apply it to the last 
     pattern = '(?<=+|-)\d+';
-    [start,m_end]=regexp(text,pattern)
+    [start,m_end]=regexp(text,pattern);
     if(~isempty(start))
         sortedpoly(length(sortedpoly)) = str2num(text(start(1):m_end(1)));
     end

@@ -4,7 +4,8 @@
 % This script will utilize other functions to create an animation of a
 % projectile motion problem 
 %============================ Part 1 ===============================
-h = animatedline;  % Create the object that will be the line that we draw
+instr = msgbox('Hi!  Welcome to the projectile motion grapher!  Once you click "OK", a calculator will appear and you can input a polynomial function of x.  The program will then graph the solution!','Projectile Motion Graphing Calculator');
+uiwait(instr);
 f = input_function(); % Input is a script, similar to calculator, allows user 
                       % to input a function with buttons.  Returns a
                       % function handle.
@@ -25,6 +26,7 @@ axis([0 firstreal 0 m]) % First [] will be the x-axis markings, Second []
 % function value and adds this point to the animated line object.  This
 % will go through and add a point and draw that point everytime the loop is
 % executed
+h = animatedline;  % Create the object that will be the line that we draw
 for i = 1:length(x)
     addpoints(h,x(i),y(i)); % Add points to the animated line to draw
     drawnow % Execute the drawing
